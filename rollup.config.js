@@ -5,6 +5,7 @@ import livereload from 'rollup-plugin-livereload';
 import { terser } from 'rollup-plugin-terser';
 import sveltePreprocess from 'svelte-preprocess';
 import typescript from '@rollup/plugin-typescript';
+import injectProcessEnv from 'rollup-plugin-inject-process-env';
 
 const production = !process.env.ROLLUP_WATCH;
 
@@ -46,8 +47,17 @@ export default {
 			css: css => {
 				css.write('bundle.css');
 			},
-			preprocess: sveltePreprocess(),
+			preprocess: sveltePreprocess({
+				replace: [['process.env.NODE_ENV', JSON.stringify(process.env.NODE_ENV)]],
+			  }),
 		}),
+
+		injectProcessEnv({
+            NODE_ENV: process.env.NODE_ENV,
+            UNUSED: null
+        }, {
+			include:["node_modules/hey-listen/dist/hey-listen.es.js"]
+        }),
 
 		// If you have external dependencies installed from
 		// npm, you'll most likely need these plugins. In
