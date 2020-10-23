@@ -6,13 +6,15 @@ export const B = (ref:HTMLElement) =>
      console.log(ref)
      animate( {
           from: 0,
-          to: 100,
+          to: 500,
           onUpdate: latest => {
                console.log( latest )
                sync.render(()=>{
                     ref.style.transform = `translateX(${latest}px) translateY(${latest}px) rotate(${latest}deg) translateZ(0px)`
-               })
-          }
+               },false,true)
+          },
+          duration:5000,
+          repeat:1
      } )
 }
 
